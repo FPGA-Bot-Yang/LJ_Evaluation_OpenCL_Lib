@@ -46,10 +46,7 @@ module RL_LJ_Evaluation_1st_Order_tb;
 	reg [31:0] neighbor_y;
 	reg [31:0] neighbor_z;
 	
-	
-	wire [31:0] forceoutput_x;
-	wire [31:0] forceoutput_y;
-	wire [31:0] forceoutput_z;
+	wire [127:0] forceoutput;
 	wire ovalid;
 	wire oready;
 
@@ -67,9 +64,7 @@ module RL_LJ_Evaluation_1st_Order_tb;
 		.neighbor_x(neighbor_x),
 		.neighbor_y(neighbor_y),
 		.neighbor_z(neighbor_z),	
-		.forceoutput_x(forceoutput_x),
-		.forceoutput_y(forceoutput_y),
-		.forceoutput_z(forceoutput_z)
+		.forceoutput(forceoutput)
 	);
 	
 	always #1 clk <= ~clk;

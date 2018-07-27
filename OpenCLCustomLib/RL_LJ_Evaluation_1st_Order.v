@@ -39,10 +39,8 @@ module RL_LJ_Evaluation_1st_Order
 	input  [DATA_WIDTH-1:0] ref_z,
 	input  [DATA_WIDTH-1:0] neighbor_x,
 	input  [DATA_WIDTH-1:0] neighbor_y,
-	input  [DATA_WIDTH-1:0] neighbor_z,	
-	output [DATA_WIDTH-1:0] forceoutput_x,
-	output [DATA_WIDTH-1:0] forceoutput_y,
-	output [DATA_WIDTH-1:0] forceoutput_z
+	input  [DATA_WIDTH-1:0] neighbor_z,
+	output [4*DATA_WIDTH-1:0] forceoutput
 );
 
 	assign oready = iready;
@@ -56,6 +54,11 @@ module RL_LJ_Evaluation_1st_Order
 	wire [DATA_WIDTH-1:0] dx;
 	wire [DATA_WIDTH-1:0] dy;
 	wire [DATA_WIDTH-1:0] dz;
+	
+	wire [DATA_WIDTH-1:0] forceoutput_x;
+	wire [DATA_WIDTH-1:0] forceoutput_y;
+	wire [DATA_WIDTH-1:0] forceoutput_z;
+	assign forceoutput = {32'd0,forceoutput_z,forceoutput_y,forceoutput_x};
 	
 	
 	r2_compute #(DATA_WIDTH) r2_evaluate(

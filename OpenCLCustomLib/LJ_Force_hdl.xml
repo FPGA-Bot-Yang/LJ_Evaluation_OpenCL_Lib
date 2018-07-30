@@ -18,12 +18,16 @@
       <AVALON port="iready" type="iready"/>
       <AVALON port="ovalid" type="ovalid"/>
       <AVALON port="oready" type="oready"/>
+<!--  
       <INPUT  port="ref_x" width="32"/>
       <INPUT  port="ref_y" width="32"/>
       <INPUT  port="ref_z" width="32"/>
       <INPUT  port="neighbor_x" width="32"/>
       <INPUT  port="neighbor_y" width="32"/>
-	  <INPUT  port="neighbor_z" width="32"/>
+      <INPUT  port="neighbor_z" width="32"/>
+-->
+      <INPUT  port="ref" width="128"/>
+      <INPUT  port="neighbor" width="128"/>
       <OUTPUT port="forceoutput" width="128"/>
 
     </INTERFACE>

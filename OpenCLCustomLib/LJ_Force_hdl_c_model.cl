@@ -1,7 +1,6 @@
 float4 LJ_Force_hdl(float4 ref, float4 neighbor)
 {
 	
-
   //	printf("Disclaimer: This emulation model just serve as a place holder provided by Chen Yang, the results may not 100% reflects the on board running result!\n");
 	// the logic here is not what the custom func is doing, don't use this result for verification
   printf("Distance (%f,%f,%f) (%f,%f,%f)\n",ref.x,ref.y,ref.z,neighbor.x,neighbor.y,neighbor.z);

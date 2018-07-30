@@ -34,16 +34,33 @@ module RL_LJ_Evaluation_1st_Order
 	input  iready,
 	output ovalid,
 	output oready,
-	input  [DATA_WIDTH-1:0] ref_x,
-	input  [DATA_WIDTH-1:0] ref_y,
-	input  [DATA_WIDTH-1:0] ref_z,
-	input  [DATA_WIDTH-1:0] neighbor_x,
-	input  [DATA_WIDTH-1:0] neighbor_y,
-	input  [DATA_WIDTH-1:0] neighbor_z,
+	input  [4*DATA_WIDTH-1:0] reference,
+	input  [4*DATA_WIDTH-1:0] neighbor,
+//	input  [DATA_WIDTH-1:0] ref_x,
+//	input  [DATA_WIDTH-1:0] ref_y,
+//	input  [DATA_WIDTH-1:0] ref_z,
+//	input  [DATA_WIDTH-1:0] neighbor_x,
+//	input  [DATA_WIDTH-1:0] neighbor_y,
+//	input  [DATA_WIDTH-1:0] neighbor_z,
 	output [4*DATA_WIDTH-1:0] forceoutput
 );
 
 	assign oready = iready;
+
+	wire [DATA_WIDTH-1:0] ref_x;
+	wire [DATA_WIDTH-1:0] ref_y;
+	wire [DATA_WIDTH-1:0] ref_z;
+	wire [DATA_WIDTH-1:0] neighbor_x;
+	wire [DATA_WIDTH-1:0] neighbor_y;
+	wire [DATA_WIDTH-1:0] neighbor_z;
+	assign ref_x = reference[DATA_WIDTH-1:0];
+	assign ref_y = reference[2*DATA_WIDTH-1:DATA_WIDTH];
+	assign ref_z = reference[3*DATA_WIDTH-1:2*DATA_WIDTH];
+	assign neighbor_x = neighbor[DATA_WIDTH-1:0];
+	assign neighbor_y = neighbor[2*DATA_WIDTH-1:DATA_WIDTH];
+	assign neighbor_z = neighbor[3*DATA_WIDTH-1:2*DATA_WIDTH];
+	
+
 
 	//////////////////////////////////////////////////////////////////////////////////////
 	// Wires connection r2_evaluation and force_evaluation

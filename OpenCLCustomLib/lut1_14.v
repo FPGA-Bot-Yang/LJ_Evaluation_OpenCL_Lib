@@ -47,7 +47,7 @@ module lut1_14 #(
 //`ifdef NO_PLI
 //        altera_syncram_component.init_file = "/home/jiayi/Dropbox/CAAD_Server/MD_RL_Pipeline/Ethan_RL_LJ_Force_A10_17.1/memory_posx_1.rif"
 //`else
-        altera_syncram_component.init_file = "/home/jiayi/Dropbox/CAAD_Server/MD_RL_Pipeline/Ethan_RL_LJ_Force_A10_17.1/SourceFile/c1_14.hex",
+        altera_syncram_component.init_file = "/home/vsachde/fpga_collaboration/Intel/miniMD_FPGA/altera_opencl/LJ_Evaluation_OpenCL_Lib/OpenCLCustomLib/c1_14.hex",
 //`endif
 //,
         altera_syncram_component.intended_device_family  = "Arria 10",

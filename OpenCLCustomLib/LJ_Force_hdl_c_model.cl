@@ -1,11 +1,13 @@
-float4 LJ_Force_hdl(float ref_x, float ref_y, float ref_z, float neighbor_x, float neighbor_y, float neighbor_z)
+float4 LJ_Force_hdl(float4 ref, float4 neighbor)
 {
 	
-	printf("Disclaimer: This emulation model just serve as a place holder provided by Chen Yang, the results may not 100% reflects the on board running result!\n");
+
+  //	printf("Disclaimer: This emulation model just serve as a place holder provided by Chen Yang, the results may not 100% reflects the on board running result!\n");
 	// the logic here is not what the custom func is doing, don't use this result for verification
-	float dx = ref_x - neighbor_x;
-	float dy = ref_y - neighbor_y;
-	float dz = ref_z - neighbor_z;
+  printf("Distance (%f,%f,%f) (%f,%f,%f)\n",ref.x,ref.y,ref.z,neighbor.x,neighbor.y,neighbor.z);
+	float dx = ref.x - neighbor.x;
+	float dy = ref.y - neighbor.y;
+	float dz = ref.z - neighbor.z;
 	float r2 = dx*dx + dy*dy + dz*dz;
 	
 	float inv_r2 = 1 / r2;
@@ -19,6 +21,7 @@ float4 LJ_Force_hdl(float ref_x, float ref_y, float ref_z, float neighbor_x, flo
 	float LJ_Force_y = LJ_Force * dy;
 	float LJ_Force_z = LJ_Force * dz;
 	
-	float4 LJ_Force_Components = (float4)(0.0f, LJ_Force_z, LJ_Force_y, LJ_Force_x);
+	float4 LJ_Force_Components = (float4){LJ_Force_x, LJ_Force_y, LJ_Force_z,0.0f};
+	
 	return LJ_Force_Components;
 }

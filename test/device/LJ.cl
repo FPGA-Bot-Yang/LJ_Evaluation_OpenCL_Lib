@@ -28,17 +28,21 @@
 
 #define WORKSIZE 2000
 
-__kernel void LJ(__global const float *restrict ref_x, 
-            __global const float *restrict ref_y, 
-            __global const float *restrict ref_z,
-			__global const float *restrict neighbor_x,
-			__global const float *restrict neighbor_y,
-			__global const float *restrict neighbor_z,
+__kernel void LJ(
+			//__global const float *restrict ref_x, 
+            		//__global const float *restrict ref_y, 
+            		//__global const float *restrict ref_z,
+            		__global const float4 *restrict ref,
+			//__global const float *restrict neighbor_x,
+			//__global const float *restrict neighbor_y,
+			//__global const float *restrict neighbor_z,
+			__global const float4 *restrict neighbor,
 			__global float4 *restrict Force_out)
 {
 	#pragma unroll 1
 	for (int i = 0; i < WORKSIZE; ++i){
-		Force_out[i] = LJ_Force_hdl(ref_x[i], ref_y[i], ref_z[i], neighbor_x[i], neighbor_y[i], neighbor_z[i]);
+		//Force_out[i] = LJ_Force_hdl(ref_x[i], ref_y[i], ref_z[i], neighbor_x[i], neighbor_y[i], neighbor_z[i]);
+		Force_out[i] = LJ_Force_hdl(ref[i], neighbor[i]);
 	}
 }
 

@@ -49,6 +49,14 @@ module RL_LJ_Evaluation_1st_Order_tb;
 	wire [127:0] forceoutput;
 	wire ovalid;
 	wire oready;
+	
+	wire [31:0] LJ_Force_X;
+	wire [31:0] LJ_Force_Y;
+	wire [31:0] LJ_Force_Z;
+	
+	assign LJ_Force_X = forceoutput[31:0];
+	assign LJ_Force_Y = forceoutput[63:32];
+	assign LJ_Force_Z = forceoutput[95:64];
 
 	RL_LJ_Evaluation_1st_Order test_inst
 	(
@@ -58,12 +66,14 @@ module RL_LJ_Evaluation_1st_Order_tb;
 		.iready(iready),
 		.ovalid(ovalid),
 		.oready(oready),
-		.ref_x(ref_x),
-		.ref_y(ref_y),
-		.ref_z(ref_z),
-		.neighbor_x(neighbor_x),
-		.neighbor_y(neighbor_y),
-		.neighbor_z(neighbor_z),	
+		//.ref_x(ref_x),
+		//.ref_y(ref_y),
+		//.ref_z(ref_z),
+		//.neighbor_x(neighbor_x),
+		//.neighbor_y(neighbor_y),
+		//.neighbor_z(neighbor_z),
+		.reference({32'd0,ref_z,ref_y,ref_x}),
+		.neighbor({32'd0,neighbor_z,neighbor_y,neighbor_x}),
 		.forceoutput(forceoutput)
 	);
 	

@@ -24,6 +24,7 @@ module RL_LJ_Evaluation_1st_Order
 	parameter SEGMENT_WIDTH				= 4,
 	parameter BIN_WIDTH					= 8,
 	parameter BIN_NUM						= 256,
+	parameter CUTOFF_2					= 32'h43100000,						// (12^2=144 in IEEE floating point)
 	parameter LOOKUP_NUM					= SEGMENT_NUM * BIN_NUM,			// SEGMENT_NUM * BIN_NUM
 	parameter LOOKUP_ADDR_WIDTH		= SEGMENT_WIDTH + BIN_WIDTH		// log LOOKUP_NUM / log 2
 )
@@ -34,19 +35,19 @@ module RL_LJ_Evaluation_1st_Order
 	input  iready,
 	output ovalid,
 	output oready,
-	input  [4*DATA_WIDTH-1:0] reference,
-	input  [4*DATA_WIDTH-1:0] neighbor,
 //	input  [DATA_WIDTH-1:0] ref_x,
 //	input  [DATA_WIDTH-1:0] ref_y,
 //	input  [DATA_WIDTH-1:0] ref_z,
 //	input  [DATA_WIDTH-1:0] neighbor_x,
 //	input  [DATA_WIDTH-1:0] neighbor_y,
 //	input  [DATA_WIDTH-1:0] neighbor_z,
+	input  [4*DATA_WIDTH-1:0] reference,
+	input  [4*DATA_WIDTH-1:0] neighbor,
 	output [4*DATA_WIDTH-1:0] forceoutput
 );
 
 	assign oready = iready;
-
+	
 	wire [DATA_WIDTH-1:0] ref_x;
 	wire [DATA_WIDTH-1:0] ref_y;
 	wire [DATA_WIDTH-1:0] ref_z;
@@ -59,8 +60,6 @@ module RL_LJ_Evaluation_1st_Order
 	assign neighbor_x = neighbor[DATA_WIDTH-1:0];
 	assign neighbor_y = neighbor[2*DATA_WIDTH-1:DATA_WIDTH];
 	assign neighbor_z = neighbor[3*DATA_WIDTH-1:2*DATA_WIDTH];
-	
-
 
 	//////////////////////////////////////////////////////////////////////////////////////
 	// Wires connection r2_evaluation and force_evaluation
@@ -96,13 +95,14 @@ module RL_LJ_Evaluation_1st_Order
 		);
 
 	RL_Evaluate_Pairs_LJ_1st_Order #(
-		DATA_WIDTH,
-		SEGMENT_NUM,
-		SEGMENT_WIDTH,
-		BIN_WIDTH,
-		BIN_NUM,
-		LOOKUP_NUM,
-		LOOKUP_ADDR_WIDTH
+		.DATA_WIDTH(DATA_WIDTH),
+		.SEGMENT_NUM(SEGMENT_NUM),
+		.SEGMENT_WIDTH(SEGMENT_WIDTH),
+		.BIN_WIDTH(BIN_WIDTH),
+		.BIN_NUM(BIN_NUM),
+		.CUTOFF_2(CUTOFF_2),
+		.LOOKUP_NUM(LOOKUP_NUM),
+		.LOOKUP_ADDR_WIDTH(LOOKUP_ADDR_WIDTH)
 	)
 	RL_Evaluate_Pairs_LJ(
 		.clk(clock),

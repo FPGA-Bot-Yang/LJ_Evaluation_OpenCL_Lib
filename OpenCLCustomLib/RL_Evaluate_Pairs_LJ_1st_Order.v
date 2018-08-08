@@ -38,6 +38,7 @@ module RL_Evaluate_Pairs_LJ_1st_Order
 	parameter SEGMENT_WIDTH				= 4,
 	parameter BIN_WIDTH					= 8,
 	parameter BIN_NUM						= 256,
+	parameter CUTOFF_2					= 32'h43100000,						// (12^2=144 in IEEE floating point)
 
 	parameter LOOKUP_NUM					= SEGMENT_NUM * BIN_NUM,			// SEGMENT_NUM * BIN_NUM
 	parameter LOOKUP_ADDR_WIDTH		= SEGMENT_WIDTH + BIN_WIDTH		// log LOOKUP_NUM / log 2
@@ -105,18 +106,33 @@ module RL_Evaluate_Pairs_LJ_1st_Order
 	reg [DATA_WIDTH-1:0] dz_reg8;
 	reg [DATA_WIDTH-1:0] dz_reg9;
 	
+	reg [DATA_WIDTH-1:0] r2_reg2;
+	reg [DATA_WIDTH-1:0] r2_reg3;
+	reg [DATA_WIDTH-1:0] r2_reg4;
+	reg [DATA_WIDTH-1:0] r2_reg5;
+	reg [DATA_WIDTH-1:0] r2_reg6;
+	reg [DATA_WIDTH-1:0] r2_reg7;
+	reg [DATA_WIDTH-1:0] r2_reg8;
+	reg [DATA_WIDTH-1:0] r2_reg9;
+	reg [DATA_WIDTH-1:0] r2_reg10;
+	reg [DATA_WIDTH-1:0] r2_output_selection;
+	
 	reg [SEGMENT_WIDTH - 1:0] segment_id;							// Segment id, determined by r2 exponential part
 	reg [BIN_WIDTH - 1:0] bin_id;										// Bin id, determined by r2 mantissa high order bits
 	
 	wire [DATA_WIDTH-1:0] terms0_r8,terms0_r14,terms1_r8,terms1_r14;
-	
 	wire [DATA_WIDTH-1:0] r14_result, r8_result;	// final result for r3, r8, r14
-	
-	wire [31:0] LJ_force;
+	wire [DATA_WIDTH-1:0] LJ_force;
+	wire [DATA_WIDTH-1:0] LJ_Force_X_wire, LJ_Force_Y_wire, LJ_Force_Z_wire;
 	
 	assign table_rden = r2_valid;
 	
 	assign rdaddr = {segment_id, bin_id};							// asssign the table lookup address
+	
+	// assign output force (if exceed cutoff, then set as 0)
+	assign LJ_Force_X = (r2_delay > CUTOFF_2) ? 0 : LJ_Force_X_wire;
+	assign LJ_Force_Y = (r2_delay > CUTOFF_2) ? 0 : LJ_Force_Y_wire;
+	assign LJ_Force_Z = (r2_delay > CUTOFF_2) ? 0 : LJ_Force_Z_wire;
 	
 	// Generate table lookup address
 	always@(*)
@@ -185,6 +201,17 @@ module RL_Evaluate_Pairs_LJ_1st_Order
 			dz_reg6 <= 0;
 			dz_reg7 <= 0;
 			dz_reg8 <= 0;
+			
+			r2_reg2 <= 0;
+			r2_reg3 <= 0;
+			r2_reg4 <= 0;
+			r2_reg5 <= 0;
+			r2_reg6 <= 0;
+			r2_reg7 <= 0;
+			r2_reg8 <= 0;
+			r2_reg9 <= 0;
+			r2_reg10 <= 0;
+			r2_output_selection <= 0;
 			end
 		else
 			begin
@@ -233,6 +260,17 @@ module RL_Evaluate_Pairs_LJ_1st_Order
 			dz_reg6 <= dz_reg5;
 			dz_reg7 <= dz_reg6;
 			dz_reg8 <= dz_reg7;
+			
+			r2_reg2 <= r2_reg1;
+			r2_reg3 <= r2_reg2;
+			r2_reg4 <= r2_reg3;
+			r2_reg5 <= r2_reg4;
+			r2_reg6 <= r2_reg5;
+			r2_reg7 <= r2_reg6;
+			r2_reg8 <= r2_reg7;
+			r2_reg9 <= r2_reg8;
+			r2_reg10 <= r2_reg9;
+			r2_output_selection <= r2_reg10;
 			end
 		end
 
@@ -331,7 +369,7 @@ module RL_Evaluate_Pairs_LJ_1st_Order
 		.aclr(rst),              //   input,   width = 2,    clr.clr
 		.ay(LJ_force),           //   input,  width = 32,     ay.ay
 		.az(dx_reg8),            //   input,  width = 32,     az.az
-		.result(LJ_Force_X)      //   output,  width = 32, result.result
+		.result(LJ_Force_X_wire)      //   output,  width = 32, result.result
 	);
 	
 	// Get Force component on Y direction: Fy = (Force/J) * dy
@@ -341,7 +379,7 @@ module RL_Evaluate_Pairs_LJ_1st_Order
 		.aclr(rst),              //   input,   width = 2,    clr.clr
 		.ay(LJ_force),           //   input,  width = 32,     ay.ay
 		.az(dy_reg8),            //   input,  width = 32,     az.az
-		.result(LJ_Force_Y)      //   output,  width = 32, result.result
+		.result(LJ_Force_Y_wire)      //   output,  width = 32, result.result
 	);
 	
 	// Get Force component on Z direction: Fz = (Force/J) * dz
@@ -351,7 +389,7 @@ module RL_Evaluate_Pairs_LJ_1st_Order
 		.aclr(rst),              //   input,   width = 2,    clr.clr
 		.ay(LJ_force),           //   input,  width = 32,     ay.ay
 		.az(dz_reg8),            //   input,  width = 32,     az.az
-		.result(LJ_Force_Z)      //   output,  width = 32, result.result
+		.result(LJ_Force_Z_wire)      //   output,  width = 32, result.result
 	);
 	
 endmodule
